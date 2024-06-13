@@ -1,63 +1,92 @@
 from tkinter import *
 
+class Calculator:
+    def __init__(self, root):
+        self.root = root
+        self.bar = Entry(root, borderwidth=5, width=20, font=('Arial', 16))
+        self.bar.grid(row=0, column=0, columnspan=4)
+        self.first_num = None
+        self.operation = None
+        self.create_buttons()
+
+    def create_buttons(self):
+        buttons = [Button(self.root, text=str(i), padx=30, pady=20, font=('Arial', 16), command=lambda num=i: self.on_click(num)) for i in range(10)]
+        
+        button_add = Button(self.root, text="+", padx=30, pady=20, font=('Arial', 16), command=self.add)
+        button_subtract = Button(self.root, text="-", padx=32, pady=20, font=('Arial', 16), command=self.subtract)
+        button_multiply = Button(self.root, text="x", padx=31, pady=20, font=('Arial', 16), command=self.multiply)
+        button_divide = Button(self.root, text="/", padx=33, pady=20, font=('Arial', 16), command=self.divide)
+
+        button_equal = Button(self.root, text="=", padx=74, pady=20, highlightthickness=2, font=('Arial', 16), command=self.equal)
+        button_clear = Button(self.root, text="Clear", padx=56, pady=20, font=('Arial', 16), command=self.clear)
+
+        # Place buttons
+        buttons[7].grid(row=1, column=0)
+        buttons[8].grid(row=1, column=1)
+        buttons[9].grid(row=1, column=2)
+        button_add.grid(row=1, column=3)
+
+        buttons[4].grid(row=2, column=0)
+        buttons[5].grid(row=2, column=1)
+        buttons[6].grid(row=2, column=2)
+        button_subtract.grid(row=2, column=3)
+        
+        buttons[1].grid(row=3, column=0)
+        buttons[2].grid(row=3, column=1)
+        buttons[3].grid(row=3, column=2)
+        button_multiply.grid(row=3, column=3)
+
+        buttons[0].grid(row=4, column=0)
+        button_clear.grid(row=4, column=1, columnspan=2)
+        button_divide.grid(row=4, column=3)
+
+        button_equal.grid(row=5, column=0, columnspan=4)
+
+    def on_click(self, num):
+        self.bar.insert(END, num)
+
+    def add(self):
+        self.first_num = float(self.bar.get())
+        self.bar.delete(0, END)
+        self.operation = 'add'
+
+    def subtract(self):
+        self.first_num = float(self.bar.get())
+        self.bar.delete(0, END)
+        self.operation = 'subtract'
+
+    def multiply(self):
+        self.first_num = float(self.bar.get())
+        self.bar.delete(0, END)
+        self.operation = 'multiply'
+
+    def divide(self):
+        self.first_num = float(self.bar.get())
+        self.bar.delete(0, END)
+        self.operation = 'divide'
+
+    def equal(self):
+        second_num = float(self.bar.get())
+        self.bar.delete(0, END)
+        if self.operation == 'add':
+            result = self.first_num + second_num
+        elif self.operation == 'subtract':
+            result = self.first_num - second_num
+        elif self.operation == 'multiply':
+            result = self.first_num * second_num
+        elif self.operation == 'divide':
+            if second_num != 0:
+                result = self.first_num / second_num
+            else:
+                self.bar.insert(0, 'Error')
+                return
+        self.bar.insert(0, f'{result:g}')
+
+    def clear(self):
+        self.bar.delete(0, END)
+
 if __name__ == "__main__":
     root = Tk()
-
-    def on_click(num):
-        bar.insert(END, num)
-    
-    def add():
-        first_num = bar.get()
-        bar.delete(0, END)
-        global f_num
-        f_num = int(first_num)
-    
-    def equal():
-        second_num = bar.get()
-        bar.delete(0, END)
-        bar.insert(0, f_num + int(second_num))
-
-    
-    def clear():
-        bar.delete(0, END)
-
-    # Input field
-    bar = Entry(root, borderwidth=5, width=20, font=(16))
-    bar.grid(row=0, column=0, columnspan=4)
-
-    # Define buttons
-    button_1 = Button(root, text="1", padx=40, pady=30, font=(16), command=lambda:on_click(1))
-    button_2 = Button(root, text="2", padx=40, pady=30, font=(16), command=lambda:on_click(2))
-    button_3 = Button(root, text="3", padx=40, pady=30, font=(16), command=lambda:on_click(3))
-    button_4 = Button(root, text="4", padx=40, pady=30, font=(16), command=lambda:on_click(4))
-    button_5 = Button(root, text="5", padx=40, pady=30, font=(16), command=lambda:on_click(5))
-    button_6 = Button(root, text="6", padx=40, pady=30, font=(16), command=lambda:on_click(6))
-    button_7 = Button(root, text="7", padx=40, pady=30, font=(16), command=lambda:on_click(7))
-    button_8 = Button(root, text="8", padx=40, pady=30, font=(16), command=lambda:on_click(8))
-    button_9 = Button(root, text="9", padx=40, pady=30, font=(16), command=lambda:on_click(9))
-    button_0 = Button(root, text="0", padx=40, pady=30, font=(16), command=lambda:on_click(0))
-    button_add = Button(root, text="+", padx=40, pady=30, font=(16), command=add)
-    button_equal = Button(root, text="=", padx=90, pady=30, font=(16), command=equal)
-    button_clear = Button(root, text="Clear", padx=76, pady=30, font=(16), command=clear)
-
-    # Place buttons
-    button_1.grid(row=3, column=0)
-    button_2.grid(row=3, column=1)
-    button_3.grid(row=3, column=2)
-
-    button_4.grid(row=2, column=0)
-    button_5.grid(row=2, column=1)
-    button_6.grid(row=2, column=2)
-
-    button_7.grid(row=1, column=0)
-    button_8.grid(row=1, column=1)
-    button_9.grid(row=1, column=2)
-    button_add.grid(row=1, column=3)
-
-    button_0.grid(row=4, column=0)
-    button_clear.grid(row=4, column=1, columnspan=2)
-
-    button_equal.grid(row=5, column=1, columnspan=2)
-
-    # Display the interface
+    root.title("Calculator")
+    calculator = Calculator(root)
     root.mainloop()
